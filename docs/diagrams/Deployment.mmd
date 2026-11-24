@@ -1,0 +1,8 @@
+flowchart LR
+    Dev["5 Developers / Feature Branches"] --> GH["GitHub Repo and Pull Requests"]
+    GH --> CI["GitHub Actions — Python and JS checks + tests"]
+    CI -->|"pass on main"| Hook["Render Deploy Hook"]
+    Hook --> App["Render Python Web Service"]
+    Users["Visitors / Customers / Admins"] -->|"HTTPS"| App
+    App --> DB["SQLite demo file (ephemeral on free tier)"]
+    App -. "future persistent alternative" .-> Pg["PostgreSQL / persistent disk"]

@@ -1,0 +1,17 @@
+flowchart TD
+    A([Start]) --> B[Browse movies]
+    B --> C[Select a movie and showtime]
+    C --> D[View seat map]
+    D --> E[Select 1 to 8 seats]
+    E --> F{Any seats available?}
+    F -- No --> D
+    F -- Yes --> G[Optional snacks and promo]
+    G --> H{Logged in?}
+    H -- No --> I[Sign in or register]
+    I --> H
+    H -- Yes --> J[Review server-priced checkout]
+    J --> K[Submit confirmation]
+    K --> L{Transaction succeeds?}
+    L -- No, conflict --> D
+    L -- Yes --> M[View booking and ticket]
+    M --> N([End])

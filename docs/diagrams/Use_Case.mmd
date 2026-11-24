@@ -1,0 +1,19 @@
+flowchart LR
+    V["Visitor"]
+    C["Customer"]
+    A["Admin"]
+    subgraph CineVerse["CineVerse Cinema Booking System"]
+      U1([Browse and search movies])
+      U2([View movie details and showtimes])
+      U3([View available seats])
+      U4([Register or sign in])
+      U5([Reserve seats and confirm demo booking])
+      U6([Print ticket QR])
+      U7([View and cancel bookings])
+      U8([Manage favorites and reviews])
+      U9([Add movies and showtimes])
+      U10([View booking analytics])
+    end
+    V --> U1 & U2 & U3 & U4
+    C --> U1 & U2 & U3 & U5 & U6 & U7 & U8
+    A --> U9 & U10

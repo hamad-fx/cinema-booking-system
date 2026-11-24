@@ -1,0 +1,10 @@
+stateDiagram-v2
+    [*] --> Draft
+    Draft --> SelectingSeats : movie/showtime chosen
+    SelectingSeats --> Checkout : seats selected
+    Checkout --> SelectingSeats : back / conflict
+    Checkout --> Confirmed : atomic booking saved
+    Confirmed --> Cancelled : cancel before show date
+    Confirmed --> ShowDatePassed : show date reached
+    Cancelled --> [*]
+    ShowDatePassed --> [*]

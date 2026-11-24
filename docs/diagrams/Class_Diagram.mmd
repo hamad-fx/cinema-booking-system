@@ -1,0 +1,55 @@
+classDiagram
+    class User {
+      +int id
+      +str name
+      +str email
+      +str role
+      +register()
+      +login()
+    }
+    class Movie {
+      +int id
+      +str title
+      +str genre
+      +int duration
+    }
+    class Showtime {
+      +int id
+      +str hall
+      +date show_date
+      +str show_time
+      +int base_price
+    }
+    class Booking {
+      +int id
+      +str code
+      +str status
+      +int total
+      +confirm()
+      +cancel()
+    }
+    class BookingSeat {
+      +str seat
+      +int price
+    }
+    class Snack {
+      +int id
+      +str name
+      +int price
+    }
+    class BookingSnack {
+      +int quantity
+      +int price
+    }
+    class Review {
+      +int stars
+      +str comment
+    }
+    User "1" --> "0..*" Booking : places
+    User "1" --> "0..*" Review : writes
+    Movie "1" --> "0..*" Showtime : schedules
+    Movie "1" --> "0..*" Review : receives
+    Showtime "1" --> "0..*" Booking : contains
+    Booking "1" *-- "1..8" BookingSeat : allocates
+    Booking "1" *-- "0..*" BookingSnack : includes
+    BookingSnack "*" --> "1" Snack : references

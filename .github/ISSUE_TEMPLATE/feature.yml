@@ -1,0 +1,28 @@
+name: Feature task
+description: Implement and track a cinema system feature
+labels: [feature]
+body:
+  - type: textarea
+    id: description
+    attributes:
+      label: Feature description
+      description: User story and intended implementation
+    validations:
+      required: true
+  - type: textarea
+    id: criteria
+    attributes:
+      label: Acceptance criteria
+      placeholder: "- [ ] UI working\n- [ ] Validation working\n- [ ] Test added"
+    validations:
+      required: true
+  - type: input
+    id: estimate
+    attributes:
+      label: Estimate (hours)
+      placeholder: "6"
+  - type: input
+    id: deadline
+    attributes:
+      label: Target date
+      placeholder: "2026-11-26"

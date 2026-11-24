@@ -1,0 +1,43 @@
+name: CineVerse CI and CD
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  validate-and-test:
+    name: Syntax, integration tests and smoke checks
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+      - uses: actions/setup-python@v6
+        with:
+          python-version: '3.12'
+      - name: Compile Python files
+        run: python -m compileall -q cinema server.py tests
+      - name: Check JavaScript syntax
+        run: find public/js -name '*.js' -exec node --check {} \;
+      - name: Run Python tests (temporary SQLite)
+        run: python -m unittest discover -s tests -v
+
+  deploy:
+    name: Trigger Render deployment after passing tests
+    needs: validate-and-test
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Deploy using the configured secret hook
+        env:
+          RENDER_DEPLOY_HOOK_URL: ${{ secrets.RENDER_DEPLOY_HOOK_URL }}
+        run: |
+          if [ -z "$RENDER_DEPLOY_HOOK_URL" ]; then
+            echo 'No Render deployment hook configured; skipping deployment.'
+            exit 0
+          fi
+          curl --fail --show-error --silent --request POST "$RENDER_DEPLOY_HOOK_URL"
+          echo 'Deploy requested; check Render deployment logs for final status.'

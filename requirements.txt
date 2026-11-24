@@ -1,0 +1,2 @@
+# Optional runtime feature: QR PNG e-tickets. All other server components are in Python stdlib.
+qrcode[pil]==8.2

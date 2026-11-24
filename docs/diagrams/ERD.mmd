@@ -1,0 +1,53 @@
+erDiagram
+    USERS ||--o{ SESSIONS : has
+    USERS ||--o{ BOOKINGS : makes
+    USERS ||--o{ REVIEWS : writes
+    USERS ||--o{ FAVORITES : saves
+    MOVIES ||--o{ FAVORITES : bookmarked
+    MOVIES ||--o{ REVIEWS : receives
+    MOVIES ||--o{ SHOWTIMES : has
+    SHOWTIMES ||--o{ BOOKINGS : reserved
+    SHOWTIMES ||--o{ BOOKING_SEATS : occupied
+    BOOKINGS ||--o{ BOOKING_SEATS : assigns
+    BOOKINGS ||--o{ BOOKING_SNACKS : includes
+    SNACKS ||--o{ BOOKING_SNACKS : sold
+    USERS { int id PK
+      string name
+      string email UK
+      string password_hash
+      string role }
+    MOVIES { int id PK
+      string title
+      string genre
+      int duration }
+    SHOWTIMES { int id PK
+      int movie_id FK
+      string hall
+      date show_date
+      string show_time
+      int base_price }
+    BOOKINGS { int id PK
+      int user_id FK
+      int showtime_id FK
+      string code UK
+      int total
+      string status }
+    BOOKING_SEATS { int showtime_id PK
+      string seat PK
+      int booking_id FK
+      int price }
+    SESSIONS { string token_hash PK
+      int user_id FK
+      int expires_at }
+    REVIEWS { int id PK
+      int user_id FK
+      int movie_id FK
+      int stars }
+    FAVORITES { int user_id PK
+      int movie_id PK }
+    SNACKS { int id PK
+      string name
+      int price }
+    BOOKING_SNACKS { int booking_id PK
+      int snack_id PK
+      int quantity }

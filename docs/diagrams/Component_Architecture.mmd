@@ -1,0 +1,16 @@
+flowchart TB
+    Browser["Browser (HTML/CSS/JS)"] --> API["Python HTTP API (server.py)"]
+    subgraph Frontend["Feature-first frontend"]
+       Catalog["catalog.js"]
+       Showtimes["showtimes.js"]
+       Seats["seats.js"]
+       Booking["booking.js"]
+       Account["account.js"]
+       Admin["admin.js"]
+    end
+    Browser --- Frontend
+    API --> Auth["auth.py — hashed passwords and sessions"]
+    API --> Domain["service.py — pricing, booking, reviews"]
+    Auth --> DB["db.py / SQLite"]
+    Domain --> DB
+    API --> DB

@@ -1,0 +1,26 @@
+sequenceDiagram
+    actor C as Customer
+    participant UI as Browser UI
+    participant API as Python API
+    participant DB as SQLite Database
+    C->>UI: Choose movie and showtime
+    UI->>API: GET /showtimes/{id}/seats
+    API->>DB: Read occupied seats
+    DB-->>API: Occupied seat IDs
+    API-->>UI: Seat map and showtime price
+    C->>UI: Select seats, snacks, promo
+    C->>UI: Confirm demo booking
+    UI->>API: POST /bookings (authenticated)
+    API->>DB: BEGIN IMMEDIATE
+    API->>DB: Read showtime and prices
+    API->>DB: Check seat conflicts
+    alt All seats available
+        API->>DB: Insert booking and seat rows
+        API->>DB: COMMIT
+        API-->>UI: 201 booking code and total
+        UI-->>C: Show booking in My Bookings
+    else Seat already occupied
+        API->>DB: ROLLBACK
+        API-->>UI: 409 seat conflict
+        UI-->>C: Select other seats
+    end
