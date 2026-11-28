@@ -20,7 +20,27 @@ export async function showBookings(state,nav,notify){
   document.getElementById('app').innerHTML=`<section class="section"><span class="eyebrow">My account</span><h1 class="section-title">My Bookings</h1><p class="muted">View your tickets and cancel eligible demo bookings.</p><div class="booking-list">${result.bookings.length?result.bookings.map(b=>`<article class="booking"><div class="row"><h3>${esc(b.movie_emoji)} ${esc(b.movie_title)}</h3><span class="status ${b.status==='cancelled'?'cancelled':''}">${esc(b.status)}</span></div><p class="muted">${esc(b.show_date)} · ${esc(b.show_time)} · ${esc(b.hall)}</p><div class="line"><span>Booking ${esc(b.code)}</span><strong>${money(b.total)}</strong></div><div class="line"><span>Seats</span><strong>${esc(b.seats.join(', ')||'Released')}</strong></div><div class="actions"><button class="secondary" data-ticket="${b.id}">View Ticket</button>${b.status==='confirmed'?`<button class="danger" data-cancel="${b.id}">Cancel Booking</button>`:''}</div></article>`).join(''):'<div class="empty">No bookings yet. Your next movie adventure starts here!</div>'}</div><button class="primary" id="more-movies">Explore Movies →</button></section>`;
   document.getElementById('more-movies').onclick=()=>nav('home');
   document.querySelectorAll('[data-ticket]').forEach(btn=>btn.onclick=()=>{state.ticket=result.bookings.find(b=>b.id===Number(btn.dataset.ticket));nav('ticket');});
-  document.querySelectorAll('[data-cancel]').forEach(btn=>btn.onclick=async()=>{if(!confirm('Cancel this booking? Seats will be released.'))return;try{await api(`/bookings/${btn.dataset.cancel}/cancel`,{});notify('Booking cancelled.');showBookings(state,nav,notify);}catch(e){notify(e.message)}});
+
+document.querySelectorAll('[data-cancel]').forEach(btn => {
+  btn.onclick = async () => {
+    if (!confirm('Cancel this booking? Seats will be released.')) return;
+
+    btn.disabled = true;
+    btn.textContent = 'Cancelling…';
+
+    try {
+      await api(`/bookings/${btn.dataset.cancel}/cancel`, {});
+
+      notify('Booking cancelled.');
+      await showBookings(state, nav, notify);
+
+    } catch (e) {
+      notify(e.message);
+      btn.disabled = false;
+      btn.textContent = 'Cancel Booking';
+    }
+  };
+});
 }
 
 export function showTicket(state,nav){
